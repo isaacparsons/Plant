@@ -89,6 +89,17 @@ const light = new Schema(
   },
   { timestamps: true }
 );
+const water = new Schema(
+  {
+    plantId: {
+      type: SchemaTypes.ObjectId,
+      required: true,
+    },
+    amount: Number,
+    units: "ml",
+  },
+  { timestamps: true }
+);
 
 const Plant = model("Plant", plants);
 const PlantSetting = model("PlantSetting", plantSettings);
@@ -96,6 +107,7 @@ const PlantDetail = model("PlantDetail", plantDetails);
 const Environment = model("Environment", environment);
 const Soil = model("Soil", soil);
 const Light = model("Light", light);
+const Water = model("Water", water);
 
 export default {
   Plant,
@@ -104,4 +116,5 @@ export default {
   Environment,
   Soil,
   Light,
+  Water,
 };

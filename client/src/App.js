@@ -4,6 +4,7 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import HomeScreen from "./Screens/HomeScreen";
+import PlantDetails from "./Screens/PlantDetails";
 
 const muiTheme = createMuiTheme();
 
@@ -21,6 +22,9 @@ export const App = () => {
           <Switch>
             <Route exact path="/">
               <HomeScreen />
+            </Route>
+            <Route path="/plant/:id">
+              <PlantDetails />
             </Route>
           </Switch>
         </div>
