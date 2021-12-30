@@ -1,0 +1,10 @@
+light grey #cbccc9
+very dark grey #54555c
+Dark green #44c20c
+medium green #8bd455
+light green #84cc44
+dark grey #747b7c
+medium dark grey #9c9f9b
+grey #858787
+light grey #9fa4a5
+purple grey #999ca4
