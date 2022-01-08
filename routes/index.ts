@@ -2,29 +2,56 @@ import { Router } from "express";
 const router = Router();
 import mongoose from "mongoose";
 import MONGO from "../config/keys";
-import ConnectionService from "../services/connection";
-import { NrgError } from "../errors/Errors";
+import PlantController from "../controllers/plants";
 import { successResponseFormat } from "../utils/response";
-import { server } from "../server";
 
-router.get("/test", async (req: any, res: any, next: any) => {
-  throw new NrgError("woops");
-});
-
-router.get("/connections", async (req: any, res: any, next: any) => {
+router.post("/plant", async (req: any, res: any, next: any) => {
   try {
-    var nrgConnection = await ConnectionService.findConnection("nrg");
-    var adamsConnection = await ConnectionService.findConnection("adams");
-    res.status(200).json(successResponseFormat([nrgConnection, adamsConnection]));
+    var { name, i2cAddr } = req.body;
+    var plant = await PlantController.createPlant(name, i2cAddr);
+    res.status(200).json(plant);
   } catch (err) {
     next(err);
   }
 });
-router.delete("/delete_all", async (req: any, res: any, next: any) => {
+router.get("/plant/:id", async (req: any, res: any, next: any) => {
   try {
-    await mongoose.connect(MONGO.URL, { useNewUrlParser: true });
-    await server.database.deleteAllCollections(mongoose);
-    res.status(200);
+    var { id } = req.params;
+    var plant = await PlantController.getPlant(id);
+    res.status(200).json(plant);
+  } catch (err) {
+    next(err);
+  }
+});
+router.get("/plants", async (req: any, res: any, next: any) => {
+  try {
+    var plants = await PlantController.getPlants();
+    res.status(200).json(plants);
+  } catch (err) {
+    next(err);
+  }
+});
+router.post("/plant_settings/:id", async (req: any, res: any, next: any) => {
+  try {
+    var { id } = req.params;
+    var { moistureThreshold, temperatureThreshold, lightStart, lightEnd } = req.body;
+    var plantSettings = await PlantController.createPlantSettings(
+      id,
+      moistureThreshold,
+      temperatureThreshold,
+      lightStart,
+      lightEnd
+    );
+    res.status(200).json(plantSettings);
+  } catch (err) {
+    next(err);
+  }
+});
+router.get("/sensor_data/:id", async (req: any, res: any, next: any) => {
+  try {
+    var { id } = req.params;
+    var sensorData = await PlantController.getPlantData(id);
+    res.status(200).json(sensorData);
   } catch (err) {
     next(err);
   }

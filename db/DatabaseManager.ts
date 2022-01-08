@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 import KEYS from "../config/keys";
-import MODELS from "../db/models";
-const {} = MODELS;
 const { MONGO } = KEYS.default;
 
 const URL = MONGO.URL;
@@ -32,20 +30,6 @@ class DatabaseManager {
   //   }
   // };
 
-  deleteAllCollections = async () => {
-    var conn = mongoose.connection;
-
-    // Get all collections
-    const collections = await conn.db.listCollections().toArray();
-    // Create an array of collection names and drop each collection
-    if (collections.length > 0) {
-      return await Promise.all(
-        collections.map(async (collection: any) => {
-          await conn.db.dropCollection(collection.name);
-        })
-      );
-    }
-  };
   close = async () => {
     return await mongoose.connection.close();
   };

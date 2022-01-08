@@ -6,6 +6,10 @@ const plants = new Schema(
       type: String,
       required: true,
     },
+    i2cAddr: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );
@@ -46,7 +50,7 @@ const plantDetails = new Schema(
   },
   { timestamps: true }
 );
-const environment = new Schema(
+const sensorData = new Schema(
   {
     plantId: {
       type: SchemaTypes.ObjectId,
@@ -60,35 +64,19 @@ const environment = new Schema(
       type: Number,
       required: true,
     },
-  },
-  { timestamps: true, capped: { max: 200 } }
-);
-const soil = new Schema(
-  {
-    plantId: {
-      type: SchemaTypes.ObjectId,
-      required: true,
-    },
     moisture: {
       type: Number,
       required: true,
     },
+    lightOn: {
+      type: Number,
+      required: true,
+    },
+    date: Date,
   },
   { timestamps: true }
 );
-const light = new Schema(
-  {
-    plantId: {
-      type: SchemaTypes.ObjectId,
-      required: true,
-    },
-    isOn: {
-      type: Boolean,
-      required: true,
-    },
-  },
-  { timestamps: true }
-);
+
 const water = new Schema(
   {
     plantId: {
@@ -96,7 +84,8 @@ const water = new Schema(
       required: true,
     },
     amount: Number,
-    units: "ml",
+    units: String,
+    date: Date,
   },
   { timestamps: true }
 );
@@ -104,17 +93,13 @@ const water = new Schema(
 const Plant = model("Plant", plants);
 const PlantSetting = model("PlantSetting", plantSettings);
 const PlantDetail = model("PlantDetail", plantDetails);
-const Environment = model("Environment", environment);
-const Soil = model("Soil", soil);
-const Light = model("Light", light);
+const SensorData = model("SensorData", sensorData);
 const Water = model("Water", water);
 
 export default {
   Plant,
   PlantSetting,
   PlantDetail,
-  Environment,
-  Soil,
-  Light,
+  SensorData,
   Water,
 };

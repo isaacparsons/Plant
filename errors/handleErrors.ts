@@ -1,19 +1,5 @@
 import { errorResponseFormat } from "../utils/response";
 
-function handleNrgError(error: any, req: any, res: any, next: any) {
-  if (error.name === "NrgError") {
-    return res.status(400).json(errorResponseFormat(error.message));
-  }
-  next(error);
-}
-
-function handleAdamsError(error: any, req: any, res: any, next: any) {
-  if (error.name === "AdamsError") {
-    return res.status(400).json(errorResponseFormat(error.message));
-  }
-  next(error);
-}
-
 function handleRequestError(error: any, req: any, res: any, next: any) {
   if (error.name === "RequestError") {
     return res.status(400).json(errorResponseFormat(error.message));
@@ -38,10 +24,4 @@ function handleError(error: any, req: any, res: any, next: any) {
   next(error);
 }
 
-export const errorMiddleware = [
-  handleNrgError,
-  handleAdamsError,
-  handleRequestError,
-  validationError,
-  handleError,
-];
+export const errorMiddleware = [handleRequestError, validationError, handleError];

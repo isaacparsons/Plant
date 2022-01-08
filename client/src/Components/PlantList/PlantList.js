@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { List, Box, Typography } from "@material-ui/core";
+import useLatestSensorData from "../../Common/Hooks/useLatestSensorData";
 
 export default function PlantList({ data, onPlantPressed }) {
   return (
     <List>
       {data.map((item) => {
-        var { id } = item;
+        var { _id } = item;
         return (
-          <Box onClick={() => onPlantPressed(id)}>
+          <Box onClick={() => onPlantPressed(_id)}>
             <PlantCard plant={item} />
           </Box>
         );
@@ -16,49 +17,47 @@ export default function PlantList({ data, onPlantPressed }) {
   );
 }
 
-const PlantCard = (props) => {
+export const PlantCard = (props) => {
   var { plant } = props;
-  var { name, environment, soil } = plant;
-  const [currentTemperature, setCurrentTemperature] = useState(0);
-  const [currentHumidity, setCurrentHumidity] = useState(0);
-  const [currentSoilMoisture, setCurrentSoilMoisture] = useState(0);
-  const [currentLight, setCurrentLight] = useState(0);
+  const latestSensorData = useLatestSensorData(plant);
 
-  useEffect(() => {
-    if (environment.length > 0) {
-      var latestEnvironmentData = environment[0];
-      setCurrentTemperature(latestEnvironmentData.temperature);
-      setCurrentHumidity(latestEnvironmentData.humidity);
-    }
-  }, [environment]);
+  if (plant) {
+    var { name } = plant;
+    var temperature = latestSensorData.temperature.value ? `${latestSensorData.temperature.value} C` : "None";
+    var humidity = latestSensorData.humidity.value ? `${latestSensorData.humidity.value} %` : "None";
+    var soilMoisture = latestSensorData.soilMoisture.value ? `${latestSensorData.soilMoisture.value} %` : "None";
+    var light = latestSensorData.light.value ? latestSensorData.light.value : "None";
 
-  useEffect(() => {
-    if (soil.length > 0) {
-      var latestSoilData = soil[0];
-      setCurrentSoilMoisture(latestSoilData.moisture);
-    }
-  }, [soil]);
-  return (
-    <Box display={"flex"} flexDirection={"row"} borderRadius={10} margin={3} style={{ backgroundColor: "#D3D3D3" }}>
-      <Box padding={1}>
-        <Typography style={{ fontSize: 22 }}>{name}</Typography>
+    return (
+      <Box display={"flex"} flexDirection={"row"} borderRadius={10} margin={3} style={{ backgroundColor: "#D3D3D3" }}>
+        <Box padding={1}>
+          <Typography style={{ fontSize: 22 }}>{name}</Typography>
+        </Box>
+        <Box padding={1}>
+          <Typography>Temperature</Typography>
+          <Typography>{temperature}</Typography>
+        </Box>
+        <Box padding={1}>
+          <Typography>Humidity</Typography>
+          <Typography>{humidity}</Typography>
+        </Box>
+        <Box padding={1}>
+          <Typography>Soil Moisture</Typography>
+          <Typography>{soilMoisture}</Typography>
+        </Box>
+        <Box padding={1}>
+          <Typography>Light</Typography>
+          <Typography>{latestSensorData.light.value ? "ON" : "OFF"}</Typography>
+        </Box>
       </Box>
-      <Box padding={1}>
-        <Typography>Temperature</Typography>
-        <Typography>{`${currentTemperature} C`}</Typography>
+    );
+  } else {
+    return (
+      <Box display={"flex"} flexDirection={"row"} borderRadius={10} margin={3} style={{ backgroundColor: "#D3D3D3" }}>
+        <Box padding={1}>
+          <Typography style={{ fontSize: 22 }}>{"No data available"}</Typography>
+        </Box>
       </Box>
-      <Box padding={1}>
-        <Typography>Humidity</Typography>
-        <Typography>{`${currentHumidity} %`}</Typography>
-      </Box>
-      <Box padding={1}>
-        <Typography>Soil Moisture</Typography>
-        <Typography>{`${currentSoilMoisture} %`}</Typography>
-      </Box>
-      <Box padding={1}>
-        <Typography>Light</Typography>
-        <Typography>{currentLight ? "ON" : "OFF"}</Typography>
-      </Box>
-    </Box>
-  );
+    );
+  }
 };

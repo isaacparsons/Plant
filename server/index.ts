@@ -23,7 +23,7 @@ app.use(queue({ activeLimit: 1, queuedLimit: -1 }));
 app.use("/api", routes);
 app.use(errorMiddleware);
 
-export class Server {
+class Server {
   database: any;
   datamanager: any;
 
@@ -42,14 +42,19 @@ export class Server {
 
 export var server = new Server();
 
+// import PlantController from "../controllers/plants";
+// var date = new Date();
+// PlantController.createPlantData("61d0f7a018a80ee6c4d8f8d1", date, 20, 14, 16, true);
+
 if (process.env.NODE_ENV === "production") {
-  server.start();
+  // server.start();
   app.use(express.static(path.join(__dirname, "../../client/build")));
   app.get("/", async (req: any, res: any) => {
     res.sendFile(path.join(__dirname, "../../client/build/index.html"));
   });
-} else {
-  server.start();
 }
+// else {
+//   server.start();
+// }
 
 export default app;

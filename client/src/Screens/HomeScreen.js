@@ -1,9 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { Typography } from "@material-ui/core";
+import { Typography, Fab } from "@material-ui/core";
+import { Download } from "@mui/icons-material";
 import PlantList from "../Components/PlantList/PlantList";
+import { usePlants } from "../Context/PlantsContext";
+import AddPlantModal from "./AddPlantModal";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,55 +18,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const plantData = [
-  {
-    id: 1,
-    name: "test plant1",
-    environment: [
-      {
-        temperature: 20.0,
-        humidity: 15.3,
-      },
-    ],
-    soil: [
-      {
-        moisture: 34.0,
-      },
-    ],
-    light: [],
-  },
-  {
-    id: 2,
-    name: "test plant2",
-    environment: [
-      {
-        temperature: 20.0,
-        humidity: 15.3,
-      },
-    ],
-    soil: [
-      {
-        moisture: 34.0,
-      },
-    ],
-    light: [],
-  },
-];
-
 export const HomeScreen = (props) => {
   const classes = useStyles();
   const history = useHistory();
+  const [addPlantModalOpen, setAddPlantModalOpen] = useState(false);
+  const { plants } = usePlants();
 
   const onPlantPressed = (plantId) => {
     history.replace(`plant/${plantId}`);
+  };
+
+  const handleAddPlantPress = () => {
+    setAddPlantModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setAddPlantModalOpen(false);
   };
 
   return (
     <div className={classes.root}>
       <Container style={{ paddingTop: 20 }}>
         <Typography style={{ fontSize: 26 }}>Plants</Typography>
-        <PlantList data={plantData} onPlantPressed={onPlantPressed} />
+        <PlantList data={plants} onPlantPressed={onPlantPressed} />
       </Container>
+      <Fab color="primary" onClick={handleAddPlantPress} style={{ position: "fixed", bottom: 50, right: 50 }}>
+        {/* <Download /> */}
+      </Fab>
+      <AddPlantModal open={addPlantModalOpen} handleClose={handleModalClose} />
     </div>
   );
 };
