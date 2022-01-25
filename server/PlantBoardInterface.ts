@@ -45,5 +45,3 @@ const callEveryMin = async () => {
     } catch (err) {}
   });
 };
-
-callEveryMin();

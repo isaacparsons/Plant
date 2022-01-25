@@ -3,7 +3,6 @@ import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Typography, Fab } from "@material-ui/core";
-import { Download } from "@mui/icons-material";
 import PlantList from "../Components/PlantList/PlantList";
 import { usePlants } from "../Context/PlantsContext";
 import AddPlantModal from "./AddPlantModal";

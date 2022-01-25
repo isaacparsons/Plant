@@ -56,5 +56,15 @@ router.get("/sensor_data/:id", async (req: any, res: any, next: any) => {
     next(err);
   }
 });
+router.post("/sensor_data/:id", async (req: any, res: any, next: any) => {
+  try {
+    var { id } = req.params;
+    var { temperature, humidity, moisture, lightOn } = req.body;
+    var sensorData = await PlantController.createPlantData(id, new Date(), temperature, humidity, moisture, lightOn);
+    res.status(200).json(sensorData);
+  } catch (err) {
+    next(err);
+  }
+});
 
 export default router;
