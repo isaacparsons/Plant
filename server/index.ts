@@ -46,9 +46,9 @@ export var server = new Server();
 // PlantController.createPlantData("61d0f7a018a80ee6c4d8f8d1", date, 20, 14, 16, true);
 
 // if (process.env.NODE_ENV === "production") {
-app.use(express.static(path.join(__dirname, "../../client/build")));
+app.use(express.static(path.join(__dirname, "../client/build")));
 app.get("/", async (req: any, res: any) => {
-  res.sendFile(path.join(__dirname, "../../client/build/index.html"));
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 // }
 
