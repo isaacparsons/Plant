@@ -33,7 +33,6 @@ class Server {
   async start() {
     try {
       await this.database.connect();
-      await this.datamanager.start();
     } catch (error) {
       console.log(error);
     }
@@ -46,15 +45,11 @@ export var server = new Server();
 // var date = new Date();
 // PlantController.createPlantData("61d0f7a018a80ee6c4d8f8d1", date, 20, 14, 16, true);
 
-if (process.env.NODE_ENV === "production") {
-  // server.start();
-  app.use(express.static(path.join(__dirname, "../../client/build")));
-  app.get("/", async (req: any, res: any) => {
-    res.sendFile(path.join(__dirname, "../../client/build/index.html"));
-  });
-}
-// else {
-//   server.start();
+// if (process.env.NODE_ENV === "production") {
+app.use(express.static(path.join(__dirname, "../../client/build")));
+app.get("/", async (req: any, res: any) => {
+  res.sendFile(path.join(__dirname, "../../client/build/index.html"));
+});
 // }
 
 export default app;
