@@ -38,9 +38,11 @@ const _delete = async (uri) => {
 };
 
 const api = {
-  getPlants: async () => _get(`/api/plants/`),
+  createPlant: async (body) => _post("/api/plant", body),
+  getPlants: async () => _get(`/api/plants`),
   getPlant: async (id) => _get(`/api/plant/${id}`),
   getSensorData: async (plantId) => _get(`/api/sensor_data/${plantId}`),
+  getPlantSettings: async (plantId) => _get(`/api/plant_settings/${plantId}`),
   createPlantSettings: async (plantId, body) => _post(`/api/plant_settings/${plantId}`, body),
 };
 export default api;

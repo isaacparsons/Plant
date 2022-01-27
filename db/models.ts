@@ -6,7 +6,7 @@ const plants = new Schema(
       type: String,
       required: true,
     },
-    i2cAddr: {
+    deviceId: {
       type: Number,
       required: true,
     },
@@ -16,7 +16,7 @@ const plants = new Schema(
 const plantSettings = new Schema(
   {
     plantId: {
-      type: SchemaTypes.ObjectId,
+      type: Number,
       required: true,
     },
     moistureThreshold: {
@@ -41,7 +41,7 @@ const plantSettings = new Schema(
 const plantDetails = new Schema(
   {
     plantId: {
-      type: SchemaTypes.ObjectId,
+      type: Number,
       required: true,
     },
     height: String,
@@ -53,7 +53,7 @@ const plantDetails = new Schema(
 const sensorData = new Schema(
   {
     plantId: {
-      type: SchemaTypes.ObjectId,
+      type: Number,
       required: true,
     },
     temperature: {
@@ -80,7 +80,7 @@ const sensorData = new Schema(
 const water = new Schema(
   {
     plantId: {
-      type: SchemaTypes.ObjectId,
+      type: Number,
       required: true,
     },
     amount: Number,

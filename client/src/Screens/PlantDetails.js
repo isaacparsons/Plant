@@ -11,6 +11,7 @@ import { usePlants } from "../Context/PlantsContext";
 import useLatestSensorData from "../Common/Hooks/useLatestSensorData";
 import { PlantCard } from "../Components/PlantList/PlantList";
 import api from "../Api/Backend";
+import PlantSettings from "../Components/PlantSettings/PlantSettings";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export const PlantDetails = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  const { getPlant } = usePlants();
+  const { getPlant, plants } = usePlants();
   const [plant, setPlant] = useState(null);
   let { id } = useParams();
   const [temperatureThreshold, setTemperatureThreshold] = useState(0);
@@ -38,36 +39,45 @@ export const PlantDetails = (props) => {
 
   useEffect(() => {
     var _plant = getPlant(id);
+    console.log(_plant);
+    parseSensorData(_plant);
     setPlant(_plant);
-  }, [id]);
+  }, [id, plants]);
 
-  useEffect(() => {
-    if (plant) {
-      console.log(plant);
-      var { temperature, humidity, light, soil, plantSettings } = plant;
-      var { moistureThreshold, temperatureThreshold, lightStart, lightEnd } = plantSettings;
-      setMoistureThreshold(moistureThreshold);
-      setTemperatureThreshold(temperatureThreshold);
-      setLightThreshold([lightStart, lightEnd]);
-      setSoilData(soil);
+  const parseSensorData = (plant) => {
+    if (plant && plant.sensorData && plant.sensorData.length > 0) {
+      var temperature = [];
+      var humidty = [];
+      var soil = [];
+      var light = [];
+      plant.sensorData.forEach((item) => {
+        temperature.push({ value: item.temperature, date: new Date(item.date).getTime() });
+        humidty.push({ value: item.humidity, date: new Date(item.date).getTime() });
+        soil.push({ value: item.moisture, date: new Date(item.date).getTime() });
+        light.push({ value: item.lightOn, date: new Date(item.date).getTime() });
+      });
+
       setTemperatureData(temperature);
-      setHumidityData(humidity);
+      setHumidityData(humidty);
+      setSoilData(soil);
       setLightData(light);
     }
-  }, [plant]);
+  };
 
   const onBackPressed = () => {
     history.replace(`/`);
   };
 
   const handleSavePress = async () => {
-    var plantSettings = await api.createPlantSettings(id, {
-      plantId: id,
-      moistureThreshold: moistureThreshold,
-      temperatureThreshold: temperatureThreshold,
-      lightStart: lightThreshold[0],
-      lightEnd: lightThreshold[1],
-    });
+    try {
+      await api.createPlantSettings(id, {
+        plantId: id,
+        moistureThreshold: moistureThreshold,
+        temperatureThreshold: temperatureThreshold,
+        lightStart: lightThreshold[0],
+        lightEnd: lightThreshold[1],
+      });
+    } catch (error) {}
   };
 
   return (
@@ -90,41 +100,6 @@ export const PlantDetails = (props) => {
         <Graph title={"Light"} data={lightData} type={"step"} yTickFormatter={(item) => (item ? 1 : 0)} />
       </Container>
     </div>
-  );
-};
-
-const PlantSettings = ({
-  temperatureThreshold,
-  setTemperatureThreshold,
-  moistureThreshold,
-  setMoistureThreshold,
-  lightThreshold,
-  setLightThreshold,
-  handleSavePress,
-}) => {
-  return (
-    <Box
-      display="flex"
-      flexDirection={"column"}
-      alignItems={"flex-start"}
-      padding={1}
-      style={{ backgroundColor: "#D3D3D3", borderRadius: 20 }}
-    >
-      <Typography>Plant Settings</Typography>
-      <Box display="flex" width={"100%"}>
-        <Box display="flex" flexDirection={"column"} width={"50%"} margin={2}>
-          <TemperatureThreshold
-            temperatureThreshold={temperatureThreshold}
-            setTemperatureThreshold={setTemperatureThreshold}
-          />
-          <MoistureThreshold moistureThreshold={moistureThreshold} setMoistureThreshold={setMoistureThreshold} />
-        </Box>
-        <Box display="flex" flexDirection={"column"} width={"50%"} margin={2}>
-          <LightThreshold lightThreshold={lightThreshold} setLightThreshold={setLightThreshold} />
-        </Box>
-      </Box>
-      <Button onClick={handleSavePress}>Save</Button>
-    </Box>
   );
 };
 

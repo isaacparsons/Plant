@@ -5,7 +5,8 @@ import Container from "@material-ui/core/Container";
 import { Typography, Fab } from "@material-ui/core";
 import PlantList from "../Components/PlantList/PlantList";
 import { usePlants } from "../Context/PlantsContext";
-import AddPlantModal from "./AddPlantModal";
+import AddPlantModal from "../Components/AddPlantModal/AddPlantModal";
+import api from "../Api/Backend";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +32,13 @@ export const HomeScreen = (props) => {
     setAddPlantModalOpen(true);
   };
 
+  const handleAddPlant = async (plant) => {
+    try {
+      await api.createPlant(plant);
+      setAddPlantModalOpen(false);
+    } catch (error) {}
+  };
+
   const handleModalClose = () => {
     setAddPlantModalOpen(false);
   };
@@ -41,10 +49,8 @@ export const HomeScreen = (props) => {
         <Typography style={{ fontSize: 26 }}>Plants</Typography>
         <PlantList data={plants} onPlantPressed={onPlantPressed} />
       </Container>
-      <Fab color="primary" onClick={handleAddPlantPress} style={{ position: "fixed", bottom: 50, right: 50 }}>
-        {/* <Download /> */}
-      </Fab>
-      <AddPlantModal open={addPlantModalOpen} handleClose={handleModalClose} />
+      <Fab color="primary" onClick={handleAddPlantPress} style={{ position: "fixed", bottom: 50, right: 50 }}></Fab>
+      <AddPlantModal open={addPlantModalOpen} handleClose={handleModalClose} onAddPlant={handleAddPlant} />
     </div>
   );
 };

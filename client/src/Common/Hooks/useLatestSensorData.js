@@ -7,24 +7,12 @@ export default function useLatestSensorData(plant) {
   const [currentLight, setCurrentLight] = useState(0);
 
   useEffect(() => {
-    if (plant) {
-      var { temperature, humidity, soil, light } = plant;
-      if (temperature.length > 0) {
-        var latestTemperature = temperature[0];
-        setCurrentTemperature(latestTemperature);
-      }
-      if (humidity.length > 0) {
-        var latestHumidity = temperature[0];
-        setCurrentHumidity(latestHumidity);
-      }
-      if (soil.length > 0) {
-        var latestSoilMoisture = soil[0];
-        setCurrentSoilMoisture(latestSoilMoisture);
-      }
-      if (light.length > 0) {
-        var latestLight = light[0];
-        setCurrentLight(latestLight);
-      }
+    if (plant && plant.sensorData.length > 0) {
+      var { temperature, humidity, soil, light } = plant.sensorData[plant.sensorData.length - 1];
+      setCurrentTemperature(temperature);
+      setCurrentHumidity(humidity);
+      setCurrentSoilMoisture(soil);
+      setCurrentLight(light);
     }
   }, [plant]);
 

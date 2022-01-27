@@ -1,9 +1,9 @@
 import { Modal, Box, Typography, TextField, Button } from "@material-ui/core";
 import React, { useState } from "react";
 
-export default function AddPlantModal({ open, handleClose }) {
+export default function AddPlantModal({ open, handleClose, onAddPlant }) {
   const [name, setName] = useState("");
-  const [i2cAddr, setI2cAddr] = useState("");
+  const [deviceId, setDeviceId] = useState("");
   return (
     <Modal open={open} onClose={handleClose}>
       <Box
@@ -28,10 +28,10 @@ export default function AddPlantModal({ open, handleClose }) {
         >
           <Box>
             <Typography style={{ fontSize: 22 }}>Add Plant</Typography>
-            <Row label={"Name"} value={name} onChange={setName} />
-            <Row label={"I2C address"} value={i2cAddr} onChange={setI2cAddr} />
+            <Row label={"Name: "} value={name} onChange={setName} />
+            <Row label={"Device Id: "} value={deviceId} onChange={setDeviceId} />
           </Box>
-          <Button>Submit</Button>
+          <Button onClick={() => onAddPlant({ name: name, deviceId: deviceId })}>Submit</Button>
         </Box>
       </Box>
     </Modal>

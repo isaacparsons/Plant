@@ -6,9 +6,9 @@ export default function PlantList({ data, onPlantPressed }) {
   return (
     <List>
       {data.map((item) => {
-        var { _id } = item;
+        var { deviceId } = item;
         return (
-          <Box onClick={() => onPlantPressed(_id)}>
+          <Box onClick={() => onPlantPressed(deviceId)}>
             <PlantCard plant={item} />
           </Box>
         );
@@ -23,10 +23,10 @@ export const PlantCard = (props) => {
 
   if (plant) {
     var { name } = plant;
-    var temperature = latestSensorData.temperature.value ? `${latestSensorData.temperature.value} C` : "None";
-    var humidity = latestSensorData.humidity.value ? `${latestSensorData.humidity.value} %` : "None";
-    var soilMoisture = latestSensorData.soilMoisture.value ? `${latestSensorData.soilMoisture.value} %` : "None";
-    var light = latestSensorData.light.value ? latestSensorData.light.value : "None";
+    var temperature = latestSensorData.temperature ? `${latestSensorData.temperature} C` : "None";
+    var humidity = latestSensorData.humidity ? `${latestSensorData.humidity} %` : "None";
+    var soilMoisture = latestSensorData.soilMoisture ? `${latestSensorData.soilMoisture} %` : "None";
+    var light = latestSensorData.light ? latestSensorData.light : "None";
 
     return (
       <Box display={"flex"} flexDirection={"row"} borderRadius={10} margin={3} style={{ backgroundColor: "#D3D3D3" }}>
@@ -47,7 +47,7 @@ export const PlantCard = (props) => {
         </Box>
         <Box padding={1}>
           <Typography>Light</Typography>
-          <Typography>{latestSensorData.light.value ? "ON" : "OFF"}</Typography>
+          <Typography>{latestSensorData.light ? "ON" : "OFF"}</Typography>
         </Box>
       </Box>
     );

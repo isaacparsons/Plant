@@ -1,10 +1,10 @@
 import MODELS from "../db/models";
 const { Plant, PlantSetting, SensorData, Water } = MODELS;
 
-const createPlant = async (name: any, i2cAddr: any) => {
+const createPlant = async (name: any, deviceId: any) => {
   var plant = new Plant({
     name: name,
-    i2cAddr: i2cAddr,
+    deviceId: deviceId,
   });
   await plant.save();
   return plant;
@@ -15,16 +15,8 @@ const getPlants = async () => {
 };
 
 const getPlant = async (plantId: any) => {
-  var plant = await Plant.findOne({ _id: plantId });
-  var plantSettings = await getPlantSettings(plantId);
-  var plantSensorData = await SensorData.find({ plantId: plantId });
-  return {
-    _id: plant._id,
-    name: plant.name,
-    i2cAddr: plant.i2cAddr,
-    plantSettings: plantSettings,
-    sensorData: plantSensorData,
-  };
+  var plant = await Plant.findOne({ deviceId: plantId });
+  return plant;
 };
 
 const getPlantSettings = async (plantId: any) => {

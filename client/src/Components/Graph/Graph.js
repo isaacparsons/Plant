@@ -65,7 +65,7 @@ export default function Graph({ title, data, yTickFormatter, type }) {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" tickFormatter={(item) => new Date(item).getTime()} />
+          <XAxis dataKey="date" tickFormatter={(item) => new Date(item).toLocaleString()} />
           <YAxis tickFormatter={yTickFormatter} />
           {/* <Legend /> */}
           <Line type={type || "monotone"} dataKey={"value"} stroke="#8884d8" activeDot={{ r: 8 }} />
