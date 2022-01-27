@@ -69,6 +69,7 @@ router.post("/sensor_data/:id", async (req: any, res: any, next: any) => {
   try {
     var { id } = req.params;
     var { temperature, humidity, moisture, lightOn } = req.body;
+    var bool = parseInt(lightOn) ? true : false;
 
     var sensorData = await PlantController.createPlantData(
       parseInt(id),
@@ -76,7 +77,7 @@ router.post("/sensor_data/:id", async (req: any, res: any, next: any) => {
       parseFloat(temperature),
       parseFloat(humidity),
       parseFloat(moisture),
-      lightOn
+      bool
     );
     res.status(200).json(sensorData);
   } catch (err) {
